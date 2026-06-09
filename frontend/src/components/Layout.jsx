@@ -2,7 +2,8 @@ import Header from "./Header";
 
 export default function Layout({ sidebar, children }) {
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column", background:
+    "linear-gradient(to bottom, #0c4a6e, #0369a1, #38bdf8)" }}>
       
       {/* TOP HEADER */}
       <Header />
@@ -24,7 +25,7 @@ export default function Layout({ sidebar, children }) {
         <div style={{
           flex: 1,
           padding: "20px",
-          background: "#ffffff"
+          
         }}>
           {children}
         </div>

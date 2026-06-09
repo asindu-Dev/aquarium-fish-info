@@ -3,14 +3,14 @@ export default function FishCard({ fish, onClick }) {
     <div
       onClick={onClick}
       style={{
-        width: "180px",
+        width: "200px",
         borderRadius: "14px",
         overflow: "hidden",
         boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
         cursor: "pointer",
         backgroundColor: "#fff",
-        transition: "0.25s",
-        border: "1px solid #e2e8f0"
+        transition: "0.25s"
+
       }}
       onMouseOver={(e) => {
         e.currentTarget.style.transform = "translateY(-4px)";
