@@ -8,12 +8,11 @@ export default function FishDetails() {
 
   // Reusable card style (THIS is what you asked to add)
   const box = {
-    padding: "15px",
-    borderRadius: "10px",
-    background: "#f4f6f8",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-    textAlign: "center"
-  };
+  padding: "15px",
+  borderRadius: "12px",
+  background: "#f8fafc",
+  border: "1px solid #e2e8f0"
+};
 
   useEffect(() => {
     loadFish();
@@ -40,7 +39,11 @@ export default function FishDetails() {
       }}
     >
       {/* Title */}
-      <h1>🐠 {fish.name}</h1>
+      <h1 style={{ color: "#0f172a" }}>🐠 {fish.name}</h1>
+
+<p style={{ color: "#64748b" }}>
+  {fish.scientificName}
+</p>
 
       {/* Image */}
       <img
@@ -60,13 +63,13 @@ export default function FishDetails() {
 
       {/* Grid Cards */}
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: "15px",
-          marginTop: "10px"
-        }}
-      >
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "15px",
+    marginTop: "20px"
+  }}
+>
         <div style={box}>
           <h3>pH</h3>
           <p>{fish.phMin} - {fish.phMax}</p>

@@ -34,14 +34,22 @@ export default function Home() {
   // LEFT SIDEBAR (navigation only)
   const sidebar = (
     <div>
-      <h3 style={{ textAlign: "center" }}>🐠 Fish List</h3>
+      <h3 style={{ textAlign: "center", color: "#0f172a" }}>
+  Aquarium Species
+</h3>
 
       <input
-        placeholder="Search..."
-        value={search}
-        onChange={handleSearch}
-        style={{ width: "90%", margin: "10px" }}
-      />
+  placeholder="Search species..."
+  value={search}
+  onChange={handleSearch}
+  style={{
+    width: "220px",
+    padding: "10px",
+    borderRadius: "8px",
+    border: "1px solid #cbd5e1",
+    outline: "none"
+  }}
+/>
 
       {fish.map((f) => (
         <div
