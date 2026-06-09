@@ -5,28 +5,50 @@ import { useNavigate } from "react-router-dom";
 export default function Home() {
   const [fish, setFish] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
+  // Load all fish initially
   useEffect(() => {
     loadFish();
   }, []);
 
   const loadFish = async () => {
-    const res = await getAllFish();
-    setFish(res.data);
-  };
-
-  const handleSearch = async (e) => {
-    setSearch(e.target.value);
-
-    if (e.target.value === "") {
-      loadFish();
-      return;
+    setLoading(true);
+    try {
+      const res = await getAllFish();
+      setFish(res.data);
+    } catch (err) {
+      console.log(err);
     }
-
-    const res = await searchFish(e.target.value);
-    setFish(res.data);
+    setLoading(false);
   };
+
+  {fish.length === 0 && !loading && (
+  <p>No fish found.</p>
+)}
+
+  // Debounced search
+  useEffect(() => {
+    const delay = setTimeout(async () => {
+      if (search.trim() === "") {
+        loadFish();
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const res = await searchFish(search);
+        setFish(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+      setLoading(false);
+    }, 500);
+
+    return () => clearTimeout(delay);
+  }, [search]);
 
   return (
     <div>
@@ -35,15 +57,24 @@ export default function Home() {
       <input
         placeholder="Search fish..."
         value={search}
-        onChange={handleSearch}
+        onChange={(e) => setSearch(e.target.value)}
       />
+
+      {loading && <p>Loading fish...</p>}
 
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {fish.map((f) => (
           <div
             key={f._id}
             onClick={() => navigate(`/fish/${f._id}`)}
-            style={{ border: "1px solid black", margin: 10, padding: 10 }}
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "10px",
+              margin: 10,
+              padding: 10,
+              width: "150px",
+              cursor: "pointer",
+            }}
           >
             <img src={f.imageUrl} width="120" />
             <h3>{f.name}</h3>
