@@ -6,36 +6,89 @@ export default function FishDetails() {
   const { id } = useParams();
   const [fish, setFish] = useState(null);
 
+  // Reusable card style (THIS is what you asked to add)
+  const box = {
+  padding: "15px",
+  borderRadius: "12px",
+  background: "#f8fafc",
+  border: "1px solid #e2e8f0"
+};
+
   useEffect(() => {
     loadFish();
   }, []);
 
   const loadFish = async () => {
-    const res = await getFishById(id);
-    setFish(res.data);
+    try {
+      const res = await getFishById(id);
+      setFish(res.data);
+    } catch (err) {
+      console.log("Error fetching fish:", err);
+    }
   };
 
   if (!fish) return <p>Loading...</p>;
 
   return (
-    <div>
-      <h1>🐠 {fish.name}</h1>
+    <div
+      style={{
+        maxWidth: "900px",
+        margin: "0 auto",
+        padding: "20px",
+        fontFamily: "Arial"
+      }}
+    >
+      {/* Title */}
+      <h1 style={{ color: "#0f172a" }}>🐠 {fish.name}</h1>
 
+<p style={{ color: "#64748b" }}>
+  {fish.scientificName}
+</p>
+
+      {/* Image */}
       <img
         src={fish.imageUrl}
+        alt={fish.name}
         width="300"
         style={{ borderRadius: "10px" }}
       />
 
-      <p>{fish.description}</p>
+      {/* Description */}
+      <p style={{ marginTop: "10px", color: "#444" }}>
+        {fish.description}
+      </p>
 
-      <h2>Water Conditions</h2>
+      {/* Section */}
+      <h2 style={{ marginTop: "20px" }}>Water Conditions</h2>
 
-      <div style={{ display: "grid", gap: "10px" }}>
-        <div>pH: {fish.phMin} - {fish.phMax}</div>
-        <div>Temperature: {fish.tempMin} - {fish.tempMax} °C</div>
-        <div>TDS: {fish.tdsMin} - {fish.tdsMax}</div>
-        <div>Turbidity: {fish.turbidityMin} - {fish.turbidityMax}</div>
+      {/* Grid Cards */}
+      <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "15px",
+    marginTop: "20px"
+  }}
+>
+        <div style={box}>
+          <h3>pH</h3>
+          <p>{fish.phMin} - {fish.phMax}</p>
+        </div>
+
+        <div style={box}>
+          <h3>Temperature</h3>
+          <p>{fish.tempMin} - {fish.tempMax} °C</p>
+        </div>
+
+        <div style={box}>
+          <h3>TDS</h3>
+          <p>{fish.tdsMin} - {fish.tdsMax}</p>
+        </div>
+
+        <div style={box}>
+          <h3>Turbidity</h3>
+          <p>{fish.turbidityMin} - {fish.turbidityMax}</p>
+        </div>
       </div>
     </div>
   );
