@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getAllFish, searchFish } from "../services/fishService";
 import Layout from "../components/Layout";
 import { useNavigate } from "react-router-dom";
+import FishCard from "../components/FishCard";
 
 export default function Home() {
   const [fish, setFish] = useState([]);
@@ -30,6 +31,7 @@ export default function Home() {
     setFish(res.data);
   };
 
+  // LEFT SIDEBAR (navigation only)
   const sidebar = (
     <div>
       <h3 style={{ textAlign: "center" }}>🐠 Fish List</h3>
@@ -57,13 +59,29 @@ export default function Home() {
     </div>
   );
 
+  // MAIN CONTENT (dashboard grid)
   const main = (
     <div>
-      <h1>🌊 Aquarium Monitoring System</h1>
-      <p>Select a fish from the left panel to view details.</p>
+      <h1 style={{ lineHeight: "1.2", marginBottom: "10px" }}>🌊 Aquarium Monitoring System</h1>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+          gap: "15px",
+          padding: "10px"
+        }}
+      >
+        {fish.map((f) => (
+          <FishCard
+            key={f._id}
+            fish={f}
+            onClick={() => navigate(`/fish/${f._id}`)}
+          />
+        ))}
+      </div>
     </div>
   );
 
   return <Layout sidebar={sidebar}>{main}</Layout>;
 }
-

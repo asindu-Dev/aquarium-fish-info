@@ -1,21 +1,20 @@
 export default function Layout({ sidebar, children }) {
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div style={{ display: "flex", height: "100vh", fontFamily: "Arial" }}>
       
-      {/* Sidebar */}
       <div style={{
-        width: "250px",
+        width: "280px",
         borderRight: "1px solid #ddd",
-        overflowY: "auto"
+        background: "#f8f9fa",
+        padding: "10px"
       }}>
         {sidebar}
       </div>
 
-      {/* Main Content */}
       <div style={{
         flex: 1,
         padding: "20px",
-        overflowY: "auto"
+        background: "#ffffff"
       }}>
         {children}
       </div>
