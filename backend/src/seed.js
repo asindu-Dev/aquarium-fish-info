@@ -2,40 +2,73 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const Fish = require("./models/Fish");
 
-require("dotenv").config();
+dotenv.config();
 
-// FORCE load correct .env path
-dotenv.config({ path: "../.env" });
+const fishData = [
+  {
+    name: "Guppy",
+    scientificName: "Poecilia reticulata",
+    description: "Small, colorful, very easy beginner fish.",
+    imageUrl: "https://example.com/guppy.jpg",
+    phMin: 7,
+    phMax: 8,
+    tempMin: 22,
+    tempMax: 28,
+    tdsMin: 200,
+    tdsMax: 400,
+    turbidityMin: 0,
+    turbidityMax: 5,
+  },
+  {
+    name: "Molly",
+    scientificName: "Poecilia sphenops",
+    description: "Peaceful livebearer, good for community tanks.",
+    imageUrl: "https://example.com/molly.jpg",
+    phMin: 7,
+    phMax: 8.5,
+    tempMin: 24,
+    tempMax: 28,
+    tdsMin: 200,
+    tdsMax: 500,
+    turbidityMin: 0,
+    turbidityMax: 6,
+  },
+  {
+    name: "Platy",
+    scientificName: "Xiphophorus maculatus",
+    description: "Colorful and very hardy livebearer fish.",
+    imageUrl: "https://example.com/platy.jpg",
+    phMin: 7,
+    phMax: 8,
+    tempMin: 22,
+    tempMax: 28,
+    tdsMin: 180,
+    tdsMax: 400,
+    turbidityMin: 0,
+    turbidityMax: 5,
+  },
+];
 
-async function seed() {
+const seedDB = async () => {
   try {
-    console.log("MONGO:", process.env.MONGO_URI);
-
     await mongoose.connect(process.env.MONGO_URI);
 
-    await Fish.insertMany([
-      {
-        name: "Guppy",
-        scientificName: "Poecilia reticulata",
-        description: "Small freshwater fish.",
-        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVvo1-0wZEE9OgCkqva5kb73Q6lslvfCKx2A&s",
-        phMin: 7,
-        phMax: 8,
-        tempMin: 22,
-        tempMax: 28,
-        tdsMin: 200,
-        tdsMax: 400,
-        turbidityMin: 0,
-        turbidityMax: 5,
-      },
-    ]);
+    console.log("Connected to MongoDB");
 
-    console.log("Seeded successfully");
+    // Optional: clear old data (important for testing)
+    await Fish.deleteMany();
+
+    console.log("Old data cleared");
+
+    await Fish.insertMany(fishData);
+
+    console.log("Database seeded successfully");
+
     process.exit();
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error("Seeding error:", error);
     process.exit(1);
   }
-}
+};
 
-seed();
+seedDB();

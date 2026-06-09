@@ -19,17 +19,24 @@ export default function FishDetails() {
 
   return (
     <div>
-      <h1>{fish.name}</h1>
+      <h1>🐠 {fish.name}</h1>
 
-      <img src={fish.imageUrl} width="300" />
+      <img
+        src={fish.imageUrl}
+        width="300"
+        style={{ borderRadius: "10px" }}
+      />
 
       <p>{fish.description}</p>
 
-      <h3>Water Conditions</h3>
-      <p>pH: {fish.phMin} - {fish.phMax}</p>
-      <p>Temperature: {fish.tempMin} - {fish.tempMax}</p>
-      <p>TDS: {fish.tdsMin} - {fish.tdsMax}</p>
-      <p>Turbidity: {fish.turbidityMin} - {fish.turbidityMax}</p>
+      <h2>Water Conditions</h2>
+
+      <div style={{ display: "grid", gap: "10px" }}>
+        <div>pH: {fish.phMin} - {fish.phMax}</div>
+        <div>Temperature: {fish.tempMin} - {fish.tempMax} °C</div>
+        <div>TDS: {fish.tdsMin} - {fish.tdsMax}</div>
+        <div>Turbidity: {fish.turbidityMin} - {fish.turbidityMax}</div>
+      </div>
     </div>
   );
 }

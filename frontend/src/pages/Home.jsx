@@ -1,86 +1,69 @@
 import { useEffect, useState } from "react";
 import { getAllFish, searchFish } from "../services/fishService";
+import Layout from "../components/Layout";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [fish, setFish] = useState([]);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
 
-  // Load all fish initially
   useEffect(() => {
     loadFish();
   }, []);
 
   const loadFish = async () => {
-    setLoading(true);
-    try {
-      const res = await getAllFish();
-      setFish(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-    setLoading(false);
+    const res = await getAllFish();
+    setFish(res.data);
   };
 
-  {fish.length === 0 && !loading && (
-  <p>No fish found.</p>
-)}
+  const handleSearch = async (e) => {
+    const value = e.target.value;
+    setSearch(value);
 
-  // Debounced search
-  useEffect(() => {
-    const delay = setTimeout(async () => {
-      if (search.trim() === "") {
-        loadFish();
-        return;
-      }
+    if (value === "") {
+      loadFish();
+      return;
+    }
 
-      setLoading(true);
-      try {
-        const res = await searchFish(search);
-        setFish(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-      setLoading(false);
-    }, 500);
+    const res = await searchFish(value);
+    setFish(res.data);
+  };
 
-    return () => clearTimeout(delay);
-  }, [search]);
-
-  return (
+  const sidebar = (
     <div>
-      <h1>Aquarium Fish</h1>
+      <h3 style={{ textAlign: "center" }}>🐠 Fish List</h3>
 
       <input
-        placeholder="Search fish..."
+        placeholder="Search..."
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={handleSearch}
+        style={{ width: "90%", margin: "10px" }}
       />
 
-      {loading && <p>Loading fish...</p>}
-
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {fish.map((f) => (
-          <div
-            key={f._id}
-            onClick={() => navigate(`/fish/${f._id}`)}
-            style={{
-              border: "1px solid #ddd",
-              borderRadius: "10px",
-              margin: 10,
-              padding: 10,
-              width: "150px",
-              cursor: "pointer",
-            }}
-          >
-            <img src={f.imageUrl} width="120" />
-            <h3>{f.name}</h3>
-          </div>
-        ))}
-      </div>
+      {fish.map((f) => (
+        <div
+          key={f._id}
+          onClick={() => navigate(`/fish/${f._id}`)}
+          style={{
+            padding: "10px",
+            cursor: "pointer",
+            borderBottom: "1px solid #eee"
+          }}
+        >
+          {f.name}
+        </div>
+      ))}
     </div>
   );
+
+  const main = (
+    <div>
+      <h1>🌊 Aquarium Monitoring System</h1>
+      <p>Select a fish from the left panel to view details.</p>
+    </div>
+  );
+
+  return <Layout sidebar={sidebar}>{main}</Layout>;
 }
+
