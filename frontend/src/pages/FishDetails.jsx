@@ -5,14 +5,55 @@ import { getFishById } from "../services/fishService";
 export default function FishDetails() {
   const { id } = useParams();
   const [fish, setFish] = useState(null);
+  const [hoveredCard, setHoveredCard] = useState(null);
 
-  // Reusable card style (THIS is what you asked to add)
-  const box = {
-  padding: "15px",
-  borderRadius: "12px",
-  background: "#f8fafc",
-  border: "1px solid #e2e8f0"
-};
+  // Water parameter configuration with symbols and colors
+  const parameters = [
+    {
+      id: "ph",
+      label: "pH Level",
+      symbol: "🧪",
+      min: fish?.phMin,
+      max: fish?.phMax,
+      unit: "",
+      color: "#8B5CF6",
+      bgColor: "#F3E8FF",
+      description: "Acidity/Alkalinity"
+    },
+    {
+      id: "temperature",
+      label: "Temperature",
+      symbol: "🌡️",
+      min: fish?.tempMin,
+      max: fish?.tempMax,
+      unit: "°C",
+      color: "#EF4444",
+      bgColor: "#FEE2E2",
+      description: "Water Heat"
+    },
+    {
+      id: "tds",
+      label: "TDS",
+      symbol: "💧",
+      min: fish?.tdsMin,
+      max: fish?.tdsMax,
+      unit: "ppm",
+      color: "#06B6D4",
+      bgColor: "#ECFDF5",
+      description: "Dissolved Solids"
+    },
+    {
+      id: "turbidity",
+      label: "Turbidity",
+      symbol: "👁️",
+      min: fish?.turbidityMin,
+      max: fish?.turbidityMax,
+      unit: "NTU",
+      color: "#F59E0B",
+      bgColor: "#FFFBEB",
+      description: "Water Clarity"
+    }
+  ];
 
   useEffect(() => {
     loadFish();
@@ -59,37 +100,113 @@ export default function FishDetails() {
       </p>
 
       {/* Section */}
-      <h2 style={{ marginTop: "20px" }}>Water Conditions</h2>
+      <h2 style={{ marginTop: "30px", color: "#0f172a", fontSize: "24px", marginBottom: "10px" }}>
+        💧 Water Conditions
+      </h2>
+      <p style={{ color: "#64748b", marginBottom: "25px", fontSize: "14px" }}>
+        Optimal aquarium parameters for this species
+      </p>
 
-      {/* Grid Cards */}
+      {/* Grid Cards - Modern Design */}
       <div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: "15px",
-    marginTop: "20px"
-  }}
->
-        <div style={box}>
-          <h3>pH</h3>
-          <p>{fish.phMin} - {fish.phMax}</p>
-        </div>
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "20px",
+          marginTop: "20px"
+        }}
+      >
+        {parameters.map((param) => (
+          <div
+            key={param.id}
+            onMouseEnter={() => setHoveredCard(param.id)}
+            onMouseLeave={() => setHoveredCard(null)}
+            style={{
+              padding: "20px",
+              borderRadius: "16px",
+              background: param.bgColor,
+              border: `2px solid ${param.color}`,
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              transform: hoveredCard === param.id ? "translateY(-8px)" : "translateY(0)",
+              boxShadow: hoveredCard === param.id 
+                ? `0 12px 24px ${param.color}33` 
+                : `0 4px 12px rgba(0,0,0,0.08)`,
+            }}
+          >
+            {/* Symbol */}
+            <div
+              style={{
+                fontSize: "40px",
+                marginBottom: "12px",
+                animation: hoveredCard === param.id ? "bounce 0.6s ease" : "none",
+              }}
+            >
+              {param.symbol}
+            </div>
 
-        <div style={box}>
-          <h3>Temperature</h3>
-          <p>{fish.tempMin} - {fish.tempMax} °C</p>
-        </div>
+            {/* Label and Description */}
+            <h3
+              style={{
+                color: param.color,
+                margin: "0 0 4px 0",
+                fontSize: "16px",
+                fontWeight: "600"
+              }}
+            >
+              {param.label}
+            </h3>
+            <p
+              style={{
+                color: "#64748b",
+                margin: "0 0 12px 0",
+                fontSize: "12px"
+              }}
+            >
+              {param.description}
+            </p>
 
-        <div style={box}>
-          <h3>TDS</h3>
-          <p>{fish.tdsMin} - {fish.tdsMax}</p>
-        </div>
-
-        <div style={box}>
-          <h3>Turbidity</h3>
-          <p>{fish.turbidityMin} - {fish.turbidityMax}</p>
-        </div>
+            {/* Value Range */}
+            <div
+              style={{
+                background: "rgba(255, 255, 255, 0.7)",
+                padding: "12px",
+                borderRadius: "10px",
+                textAlign: "center"
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "22px",
+                  fontWeight: "700",
+                  color: param.color
+                }}
+              >
+                {param.min} - {param.max}
+              </p>
+              <p
+                style={{
+                  margin: "4px 0 0 0",
+                  fontSize: "12px",
+                  color: "#94a3b8",
+                  fontWeight: "500"
+                }}
+              >
+                {param.unit}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
+
+      {/* CSS Animation */}
+      <style>{`
+        @keyframes bounce {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+      `}</style>
     </div>
   );
 }
