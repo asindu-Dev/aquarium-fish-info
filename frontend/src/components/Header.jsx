@@ -7,12 +7,16 @@ export default function Header() {
         alignItems: "center",
         justifyContent: "space-between",
         padding: "0 20px",
-        background: "#0f172a",
+        background: "#7165eccb",
         color: "white",
         fontFamily: "Arial"
       }}
     >
-      <h2 style={{ margin: 0 }}>🐠 AquaSense Monitor</h2>
+      
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <img alt="logo" src="/src/assets/guard-logo.png" style={{ height: "40px" }} />
+        <h2 style={{ margin: 0 }}>G.U.A.R.D</h2>
+      </div>
 
       <div style={{ fontSize: "12px", opacity: 0.8 }}>
         Freshwater Aquarium Intelligence System
